@@ -23,6 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
+# Submodule directories (managed via .gitmodules)
+packages/Open-Poe-AI/
+packages/Vibe-Workflow/
+
 # Electron build output
 release/
 .webpack/
