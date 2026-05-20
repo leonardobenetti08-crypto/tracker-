@@ -94,6 +94,8 @@
   .sets-header { display: grid; grid-template-columns: 28px 1fr 1fr auto; gap: 6px; padding: 10px 0 5px; font-family: var(--mono); font-size: 10px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
   .set-block { margin-bottom: 6px; }
   .set-prev { font-family: var(--mono); font-size: 10px; color: var(--muted); padding: 0 0 3px 34px; opacity: 0.7; }
+  .prev-note { font-size: 11px; color: var(--muted); font-style: italic; padding: 6px 10px; background: var(--surface2); border-radius: 6px; margin-bottom: 10px; border-left: 2px solid var(--accent2); opacity: 0.8; }
+  .prev-note span { color: var(--accent2); font-style: normal; font-family: var(--mono); font-size: 10px; margin-right: 4px; }
   .set-prev span { color: var(--accent2); opacity: 0.7; }
   .set-row { display: grid; grid-template-columns: 28px 1fr 1fr auto; gap: 6px; align-items: center; }
   .set-num { font-family: var(--mono); font-size: 11px; color: var(--muted); text-align: center; background: var(--surface2); border-radius: 6px; padding: 10px 2px; }
@@ -226,9 +228,9 @@
   </div>
   <nav class="nav">
     <button class="nav-btn active" onclick="showView('hoy', this)">Hoy</button>
+    <button class="nav-btn" onclick="showView('dieta', this)">Dieta</button>
     <button class="nav-btn" onclick="showView('historial', this)">Historial</button>
     <button class="nav-btn" onclick="showView('progreso', this)">Progresión</button>
-    <button class="nav-btn" onclick="showView('dieta', this)">Dieta</button>
     <button class="nav-btn" onclick="showView('ajustes', this)">Ajustes</button>
   </nav>
 </div>
@@ -288,46 +290,44 @@
 const RUTINA = {
   0: { nombre: 'Domingo', tipo: 'descanso', foco: 'Descanso total', absOpcional: false, ejercicios: [] },
   1: { nombre: 'Lunes', tipo: 'entreno', foco: 'Pecho dominante + hombro lateral + tríceps', absOpcional: true, ejercicios: [
-    { id: 'lun1', nombre: 'Elevación lateral mancuerna (activación)', sets: [{ ref: '15–20' }] },
-    { id: 'lun2', nombre: 'Press Smith inclinado leve (15°)', sets: [{ ref: '4–6', label: 'Top' }, { ref: '6–8', label: 'Back off' }] },
-    { id: 'lun3', nombre: 'Press Hammer plano', sets: [{ ref: '6–8' }, { ref: '8–10' }] },
-    { id: 'lun4', nombre: 'Apertura máquina', sets: [{ ref: '8–10' }, { ref: '10–12' }] },
-    { id: 'lun5', nombre: 'Elevación lateral polea unilateral', sets: [{ ref: '10–12' }, { ref: '12–15', drop: true }] },
-    { id: 'lun6', nombre: 'Extensión tríceps polea alta', sets: [{ ref: '8–10' }, { ref: '10–12' }] },
-    { id: 'lun7', nombre: 'Extensión overhead sentado', sets: [{ ref: '8–10' }, { ref: '10–12' }] },
+    { id: 'lun1', nombre: 'Elevación lateral mancuerna apoyado', sets: [{ ref: '6–9' }] },
+    { id: 'lun2', nombre: 'Press Smith inclinado leve (15°)', sets: [{ ref: '4–6', label: 'Top' }, { ref: '6–9', label: 'Back off' }] },
+    { id: 'lun4', nombre: 'Apertura máquina', sets: [{ ref: '6–9' }, { ref: '6–9' }] },
+    { id: 'lun3', nombre: 'Press Hammer plano', sets: [{ ref: '6–9' }, { ref: '6–9' }] },
+    { id: 'lun5', nombre: 'Elevación lateral polea unilateral', sets: [{ ref: '6–9' }, { ref: '6–9', drop: true }] },
+    { id: 'lun7', nombre: 'Extensión overhead con mancuerna', sets: [{ ref: '6–9' }, { ref: '6–9' }] },
+    { id: 'lun6', nombre: 'Extensión tríceps barra', sets: [{ ref: '6–9' }, { ref: '6–9' }] },
   ]},
   2: { nombre: 'Martes', tipo: 'entreno', foco: 'Espalda (densidad) + bíceps', absOpcional: true, ejercicios: [
-    { id: 'mar1', nombre: 'Jalón cerrado', sets: [{ ref: '8–10' }, { ref: '10–12' }] },
-    { id: 'mar2', nombre: 'Remo con barra', sets: [{ ref: '4–6', label: 'Top' }, { ref: '6–8', label: 'Back off' }] },
-    { id: 'mar3', nombre: 'Remo máquina placas', sets: [{ ref: '6–8', label: 'Top' }, { ref: '8–10', label: 'Back off' }, { ref: '10–12', label: 'Acum' }] },
-    { id: 'mar4', nombre: 'Curl predicador en polea', sets: [{ ref: '8–10' }, { ref: '10–12' }] },
-    { id: 'mar5', nombre: 'Pullover máquina Hammer', sets: [{ ref: '10–12' }, { ref: '12–15' }] },
-    { id: 'mar6', nombre: 'Curl inclinado codo apoyado (spider)', sets: [{ ref: '8–10' }, { ref: '10–12' }] },
+    { id: 'mar1', nombre: 'Jalón cerrado', sets: [{ ref: '6–9' }, { ref: '6–9' }] },
+    { id: 'mar2', nombre: 'Remo con barra', sets: [{ ref: '4–6', label: 'Top' }, { ref: '6–9', label: 'Back off' }] },
+    { id: 'mar3', nombre: 'Remo unilateral Gironda', sets: [{ ref: '6–9' }, { ref: '6–9' }] },
+    { id: 'mar4', nombre: 'Curl banco scott unilateral', sets: [{ ref: '6–9' }, { ref: '6–9' }] },
+    { id: 'mar5', nombre: 'Pullover máquina Hammer (agarre neutro)', sets: [{ ref: '6–9' }, { ref: '6–9' }] },
+    { id: 'mar6', nombre: 'Curl inclinado', sets: [{ ref: '6–9' }, { ref: '6–9' }] },
   ]},
-  3: { nombre: 'Miércoles', tipo: 'descanso', foco: 'Descanso', absOpcional: false, ejercicios: [] },
-  4: { nombre: 'Jueves', tipo: 'entreno', foco: 'Piernas + abs', absOpcional: false, ejercicios: [
-    { id: 'jue1', nombre: 'Gemelos', sets: [{ ref: '10–12' }, { ref: '12–15' }, { ref: '12–15' }] },
-    { id: 'jue2', nombre: 'Hack squat', sets: [{ ref: '4–6', label: 'Top' }, { ref: '6–8', label: 'Back off' }] },
-    { id: 'jue3', nombre: 'Prensa', sets: [{ ref: '8–10' }, { ref: '10–12' }] },
-    { id: 'jue4', nombre: 'Hiperextensiones (glúteo)', sets: [{ ref: '10–12' }, { ref: '12–15' }] },
-    { id: 'jue5', nombre: 'Extensión cuádriceps', sets: [{ ref: '10–12' }, { ref: '12–15' }] },
-    { id: 'jue6', nombre: 'Curl femoral sentado', sets: [{ ref: '8–10' }, { ref: '10–12' }] },
-    { id: 'jue7', nombre: 'Ab wheel / rollout', sets: [{ ref: '8–12' }, { ref: '8–12' }] },
+  3: { nombre: 'Miércoles', tipo: 'entreno', foco: 'Piernas', absOpcional: false, ejercicios: [
+    { id: 'mie1', nombre: 'Gemelos', sets: [{ ref: '6–9' }, { ref: '6–9' }, { ref: '6–9' }] },
+    { id: 'mie2', nombre: 'Hack squat', sets: [{ ref: '4–6', label: 'Top' }, { ref: '6–9', label: 'Back off' }] },
+    { id: 'mie3', nombre: 'Hiperextensiones (glúteo)', sets: [{ ref: '6–9' }, { ref: '6–9' }, { ref: '6–9' }] },
+    { id: 'mie4', nombre: 'Extensión cuádriceps', sets: [{ ref: '6–9' }, { ref: '6–9' }] },
+    { id: 'mie5', nombre: 'Curl femoral sentado', sets: [{ ref: '6–9' }, { ref: '6–9' }] },
   ]},
-  5: { nombre: 'Viernes', tipo: 'entreno', foco: 'Hombro dominante + pecho (estiramiento) + tríceps', absOpcional: true, ejercicios: [
-    { id: 'vie1', nombre: 'Elevación lateral polea unilateral', sets: [{ ref: '10–12' }, { ref: '12–15', drop: true }] },
-    { id: 'vie2', nombre: 'Elevación lateral mancuerna', sets: [{ ref: '8–10' }, { ref: '10–12' }] },
-    { id: 'vie3', nombre: 'Press hombro Hammer', sets: [{ ref: '6–8' }, { ref: '8–10' }] },
-    { id: 'vie4', nombre: 'Apertura polea baja / cable cross', sets: [{ ref: '8–10' }, { ref: '10–12' }] },
-    { id: 'vie5', nombre: 'JM Press Smith', sets: [{ ref: '6–8', label: 'Top' }, { ref: '8–10', label: 'Back off' }, { ref: '10–12', label: 'Acum' }] },
+  4: { nombre: 'Jueves', tipo: 'entreno', foco: 'Hombro dominante + pecho + tríceps', absOpcional: true, ejercicios: [
+    { id: 'jue1', nombre: 'Elevación lateral polea unilateral', sets: [{ ref: '6–9' }, { ref: '6–9', drop: true }] },
+    { id: 'jue2', nombre: 'Press hombro Hammer', sets: [{ ref: '4–6', label: 'Top' }, { ref: '6–9', label: 'Back off' }] },
+    { id: 'jue3', nombre: 'Elevación lateral mancuerna', sets: [{ ref: '6–9' }, { ref: '6–9' }] },
+    { id: 'jue4', nombre: 'JM Press Smith', sets: [{ ref: '6–9' }, { ref: '6–9' }] },
+    { id: 'jue5', nombre: 'Apertura máquina', sets: [{ ref: '6–9' }, { ref: '6–9' }] },
   ]},
+  5: { nombre: 'Viernes', tipo: 'descanso', foco: 'Descanso', absOpcional: false, ejercicios: [] },
   6: { nombre: 'Sábado', tipo: 'entreno', foco: 'Mix acumulativo + abs', absOpcional: false, ejercicios: [
-    { id: 'sab1', nombre: 'Dominada cerrada con peso', sets: [{ ref: '4–6', label: 'Top' }, { ref: '6–8', label: 'Back off' }] },
-    { id: 'sab2', nombre: 'Press plano máquina placas', sets: [{ ref: '8–10' }, { ref: '10–12' }] },
-    { id: 'sab3', nombre: 'Elevación lateral mancuerna (alto volumen)', sets: [{ ref: '12–15' }, { ref: '15–20', drop: true }] },
-    { id: 'sab4', nombre: 'Curl predicador en polea', sets: [{ ref: '10–12' }, { ref: '12–15' }] },
-    { id: 'sab5', nombre: 'Extensión barra tríceps (énfasis estiramiento)', sets: [{ ref: '8–10' }, { ref: '10–12' }] },
-    { id: 'sab6', nombre: 'Curl martillo mancuerna', sets: [{ ref: '8–10' }, { ref: '10–12' }] },
+    { id: 'sab1', nombre: 'Dominada cerrada con peso', sets: [{ ref: '4–6', label: 'Top' }, { ref: '6–9', label: 'Back off' }] },
+    { id: 'sab2', nombre: 'Press inclinado máquina Hammer', sets: [{ ref: '4–6', label: 'Top' }, { ref: '6–9', label: 'Back off' }] },
+    { id: 'sab3', nombre: 'Elevación lateral mancuerna (alto volumen)', sets: [{ ref: '6–9' }, { ref: '6–9', drop: true }] },
+    { id: 'sab4', nombre: 'Curl banco scott', sets: [{ ref: '6–9' }, { ref: '6–9' }] },
+    { id: 'sab5', nombre: 'Extensión barra tríceps', sets: [{ ref: '6–9' }, { ref: '6–9' }, { ref: '6–9 unilateral' }] },
+    { id: 'sab6', nombre: 'Curl martillo mancuerna', sets: [{ ref: '6–9' }, { ref: '6–9' }] },
     { id: 'sab7', nombre: 'Abs (obligatorio)', sets: [{ ref: '2 ej × 2 series' }] },
   ]},
 };
@@ -481,6 +481,7 @@ function renderHoy() {
           ${data.sets.map((s, i) => renderSetRow(ex.id, i, s.kg, s.reps, ex.sets[i] || ex.sets[ex.sets.length - 1], prevSession ? prevSession.sets[i] : null)).join('')}
         </div>
         <button class="add-set-btn" onclick="addSet('${ex.id}')">+ Agregar serie extra</button>
+        ${prevSession && prevSession.note ? `<div class="prev-note"><span>↺ Sesión anterior:</span>${prevSession.note}</div>` : ''}
         <div class="note-area">
           <div class="note-label">Notas / sensaciones</div>
           <textarea class="note-input" id="note-${ex.id}" placeholder="Sensaciones, técnica, próxima sesión..." oninput="saveNote('${ex.id}', this.value)">${data.note || ''}</textarea>
